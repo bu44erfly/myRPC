@@ -13,31 +13,32 @@ public class MyRPCServer {
         UserServiceImpl userService = new UserServiceImpl();
         try {
             ServerSocket serverSocket = new ServerSocket(8899);
-            System.out.println("服务端启动了");
+            System.out.println("----Server started");
             // BIO的方式监听Socket
             while (true){
                 Socket socket = serverSocket.accept();
                 // 开启一个线程去处理
                 new Thread(()->{
                     try {
-                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                        ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+                        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                        ObjectInputStream in= new ObjectInputStream(socket.getInputStream());
                         // 读取客户端传过来的id
-                        Integer id = objectInputStream.readInt();
+                        Integer id = in.readInt() ;
                         User userByUserId = userService.getUserByUserId(id);
                         // 写入User对象给客户端
-                        objectOutputStream.writeObject(userByUserId);
-                        objectOutputStream.flush();
+                        out.writeObject(userByUserId);
+                        out.flush();
                     }catch (IOException e){
                         e.printStackTrace();
-                        System.out.println("从IO中读取数据错误");
+                        System.out.println("Error reading from IO");
                     }
                 }).start();
 
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("服务器启动失败");
+            System.out.println("server started failed");
         }
     }
 }
