@@ -1,8 +1,7 @@
-package com.sam.myRPC.server;
+package com.sam.myRPC.service;
 
 
 import com.sam.myRPC.common.Blog;
-import com.sam.myRPC.service.BlogService;
 
 public class BlogServiceImpl implements BlogService {
     @Override
