@@ -9,6 +9,7 @@ public class ObjectSerializer implements Serializer{
     public byte[] serialize(Object obj) {
         byte[] bytes = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
         try {
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(obj);
@@ -19,7 +20,6 @@ public class ObjectSerializer implements Serializer{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return bytes;
     }
 

@@ -9,13 +9,14 @@ public class ServerTest {
         BlogServiceImpl blogService = new BlogServiceImpl();
         UserServiceImpl userService = new UserServiceImpl();
 
-        ServiceProvider serviceProvider = new ServiceProvider();
+        int port = 8899 ;
+        ServiceProvider serviceProvider = new ServiceProvider("127.0.0.1", port);
         serviceProvider.addService(blogService);
         serviceProvider.addService(userService);
 
     //    ThreadPoolRPCServer RpcServer = new ThreadPoolRPCServer(serviceProvider);
 
         RPCServer server = new NettyRPCServer(serviceProvider);
-        server.start(8899);
+        server.start(port);
     }
 }

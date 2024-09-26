@@ -2,6 +2,10 @@ package com.sam.myRPC.server;
 
 
 
+import com.sam.myRPC.register.ServiceRegister;
+import com.sam.myRPC.register.ZkServiceRegister;
+
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,16 +18,23 @@ public class ServiceProvider {
     /**
      * 一个实现类可能实现多个服务接口，
      */
+    private ServiceRegister serviceRegister;
     private Map<String, Object> objectMap;
+    private String host ;
+    private int port ;
 
-    public ServiceProvider(){
+    public ServiceProvider(String host, int port){
         objectMap = new HashMap<>();
+        this.serviceRegister = new ZkServiceRegister() ;
+        this.host = host;
+        this.port = port;
     }
 
     public void addService(Object service){
         Class<?> list[] =service.getClass().getInterfaces() ;
         for(Class<?> cls : list){
             objectMap.put(cls.getName() , service) ;
+            serviceRegister.register(cls.getName() ,new InetSocketAddress(host,port));
         }
     }
 
