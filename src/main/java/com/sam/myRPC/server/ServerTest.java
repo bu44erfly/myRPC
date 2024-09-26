@@ -2,6 +2,7 @@ package com.sam.myRPC.server;
 
 import com.sam.myRPC.common.RPCResponse;
 import com.sam.myRPC.service.BlogServiceImpl;
+import com.sam.myRPC.service.UserServiceImpl;
 
 public class ServerTest {
     public static void main(String[] args) {
