@@ -1,5 +1,7 @@
 package com.sam.myRPC.register;
 
+import com.sam.myRPC.loadBalance.LoadBalance;
+import com.sam.myRPC.loadBalance.RoundLoadBalance;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -10,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 public class ZkServiceRegister implements ServiceRegister{
+    private LoadBalance balancer ;
     // curator 提供的zookeeper客户端
     private CuratorFramework client;
     // zookeeper根路径节点
@@ -27,6 +30,8 @@ public class ZkServiceRegister implements ServiceRegister{
                 .sessionTimeoutMs(40000).retryPolicy(policy).namespace(ROOT_PATH).build();
         this.client.start();
         System.out.println("zookeeper 连接成功");
+
+        balancer =new RoundLoadBalance();
     }
 
     @Override
@@ -49,9 +54,9 @@ public class ZkServiceRegister implements ServiceRegister{
     public InetSocketAddress serviceDiscovery(String serviceName) {
         try {
             List<String> strings = client.getChildren().forPath("/" + serviceName);
-            // 这里默认用的第一个，后面加负载均衡
-            String string = strings.get(0);
-            return parseAddress(string);
+            // 负载均衡
+            String str = balancer.balance(strings) ;
+            return parseAddress(str);
         } catch (Exception e) {
             e.printStackTrace();
         }
