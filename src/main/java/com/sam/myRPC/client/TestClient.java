@@ -12,7 +12,7 @@ public class TestClient {
         // 把这个客户端传入代理客户端
 
         RPCClientProxy clientProxy = new RPCClientProxy(rpcClient);
-        UserService userService= clientProxy.getProxy(UserService.class); ;
+        UserService userService = clientProxy.getProxy(UserService.class); ;
 
         // 调用方法
 

@@ -1,13 +1,18 @@
-1. 服务端如何识别 RPCRequest  
-Netty 的解码器 ObjectDecoder：  
-在服务端的 NettyServerInitializer 中，配置了 ObjectDecoder。这个解码器基于 Java 对象的序列化机制（通常使用 Serializable 接口）来反序列化字节流为特定的 Java 对象。  
-在 ObjectDecoder 中，会检查字节流中包含的类名，使用 Class.forName() 反射来加载对应的类。这就是为什么当服务端接收到字节流时，能够将其识别为 RPCRequest 对象。  
+1. 如何抽象service的方法，这样可以调用不同方法？
 
-pipeline.addLast(new ObjectDecoder(new ClassResolver() {  
-    @Override  
-    public Class<?> resolve(String className) throws ClassNotFoundException {  
-        return Class.forName(className);  // 动态加载类  
-    }  
-}));  
+  jdk动态代理，client动态代理接口，
 
-2.
+  定义Request类保存类信息，参数，参数类型， client通过**反射**调用方法 
+
+  
+
+2. 如何抽象service
+
+  维护一个serviceProvider , 保存接口与实现类的注册关系，server得到接口信息和方法参数后，可以通过反射调用方法
+
+  
+
+3. 服务端如何识别 RPCRequest
+    需要提供序列化，反序列化的参数(方法)
+
+​	decode , encode , objectSerialize , jsonSerialize
